@@ -23,5 +23,5 @@ public class AppConstants
     public static final String BAD_USER_ID_MSG = "User ID is incorrect.\nPlease try again.";
     public static final String BAD_PASSWORD_MSG = "Password is incorrect.\nPlease try again.";
     public static final String USER_ID = "dejami";
-    public static final String PASSWORD = "wedpic";
+    public static final String PASSWORD = "wedpics";
 }

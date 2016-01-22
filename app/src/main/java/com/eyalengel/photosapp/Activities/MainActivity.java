@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity
         loginButton = (Button) findViewById(R.id.login_button);
     }
 
+    //init the shared preferences class variables
     private void setSharedPreferences() {
         WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();

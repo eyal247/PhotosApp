@@ -93,7 +93,7 @@ public class FeedActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onDestroy() { //delete cache files and directory
         super.onDestroy();
         try {
             PhotosCache.trimCache(this);
@@ -109,12 +109,21 @@ public class FeedActivity extends AppCompatActivity
         return true;
     }
 
+    //enable capture and feed options also in device top right menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
-
-        return super.onOptionsItemSelected(item);
+        switch (id) {
+            case R.id.action_capture:
+                handleCaptureButtonClick();
+                return true;
+            case R.id.action_feed:
+                startActivity(new Intent(this, FeedActivity.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

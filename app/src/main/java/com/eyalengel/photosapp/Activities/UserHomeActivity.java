@@ -79,11 +79,20 @@ public class UserHomeActivity extends AppCompatActivity implements View.OnClickL
         return true;
     }
 
+    //enable capture and feed options also in device top right menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
-        return super.onOptionsItemSelected(item);
+        switch (id) {
+            case R.id.action_capture:
+                handleCaptureButtonClick();
+                return true;
+            case R.id.action_feed:
+                startActivity(new Intent(this, FeedActivity.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

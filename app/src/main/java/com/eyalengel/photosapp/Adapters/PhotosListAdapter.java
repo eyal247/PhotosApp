@@ -22,38 +22,38 @@ public class PhotosListAdapter extends ArrayAdapter<String> {
     private List<String> photosKeys;
     private int layoutResourceID;
 
-    public PhotosListAdapter(Context context, int layoutResourceID, List<String> paths) {
-        super(context, layoutResourceID, paths);
+    public PhotosListAdapter(Context context, int layoutResourceID, List<String> photosKeys) {
+        super(context, layoutResourceID, photosKeys);
 
         this.context = context;
-        this.photosKeys= paths;
+        this.photosKeys = photosKeys;
         this.layoutResourceID = layoutResourceID;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        View view = convertView;
-
-        if (view == null) {
+        if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            view = inflater.inflate(layoutResourceID, null);
+            convertView = inflater.inflate(layoutResourceID, null);
         }
 
-        ImageView photoIV = (ImageView) view.findViewById(R.id.photo_image_view);
-
-        String path = getItem(position); //get current photo key in cache
-
-        Bitmap bm = SavedSharedPreferences.retrieveBitmapFromCache(path); //retrieve current photo from cach
-
+        String key = getItem(position); //get current photo key in cache
+        Bitmap bm = SavedSharedPreferences.retrieveBitmapFromCache(key); //retrieve current photo from cache
         if (bm != null) {
-            photoIV.getLayoutParams().width = bm.getWidth();
-            photoIV.getLayoutParams().height = bm.getHeight();
-            photoIV.requestLayout(); // change ImageView size according to above width and height of current bitmap
-
-            photoIV.setImageBitmap(bm); //attach photo to ImageView
+            setBitmapInsideImageView(bm, convertView);
         }
 
-        return view;
+        return convertView;
+    }
+
+    private void setBitmapInsideImageView(Bitmap bm, View convertView)
+    {
+        ImageView photoIV = (ImageView)convertView.findViewById(R.id.photo_image_view);
+
+        photoIV.getLayoutParams().width = bm.getWidth();
+        photoIV.getLayoutParams().height = bm.getHeight();
+        photoIV.requestLayout(); // change ImageView size according to above width and height of current bitmap
+        photoIV.setImageBitmap(bm); //attach photo to ImageView
     }
 }

@@ -1,0 +1,17 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="com.eyalengel.photosapp.Fragments.UserHomeFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/home_buttons_container"
+        android:gravity="center"
+        android:text="@string/home_of_user"
+        android:textStyle="bold"
+        android:textSize="50dp"
+        android:textColor="@color/colorAccent"/>
+
+</RelativeLayout>

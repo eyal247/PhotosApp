@@ -1,10 +1,13 @@
 package com.eyalengel.photosapp.Activities;
 
+import android.annotation.TargetApi;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -109,9 +112,16 @@ public class MainActivity extends AppCompatActivity
         Boolean flag_login= SavedSharedPreferences.alreadyLoggedIn.getBoolean("alreadyLoggedIn", false);
 
         if (flag_login) { //if user already logged in, go to Home activity
-            startActivity(new Intent(MainActivity.this, UserHomeActivity.class));
-            MainActivity.this.finish();
+            startHomeActivity();
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void startHomeActivity()
+    {
+        Intent intent = new Intent(MainActivity.this, UserHomeActivity.class);
+        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
+        MainActivity.this.finish();
     }
 
     //checking if one or more fields are empty before "checking details with server"

@@ -8,6 +8,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -15,6 +17,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.eyalengel.photosapp.Fragments.FeedFragment;
+import com.eyalengel.photosapp.Fragments.UserHomeFragment;
+import com.eyalengel.photosapp.Listeners.OnFragmentInteractionListener;
 import com.eyalengel.photosapp.Model.AppConstants;
 import com.eyalengel.photosapp.Model.PhotosCache;
 import com.eyalengel.photosapp.Model.SavedSharedPreferences;
@@ -23,9 +28,11 @@ import com.eyalengel.photosapp.R;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class UserHomeActivity extends AppCompatActivity implements View.OnClickListener{
+public class UserHomeActivity extends AppCompatActivity implements View.OnClickListener, OnFragmentInteractionListener
+{
 
-
+    private FragmentManager fm;
+    private Fragment currFragment;
     private Button captureButton;
     private Button feedButton;
     private int photosCount; // Number of uploaded photos
@@ -40,9 +47,18 @@ public class UserHomeActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_home);
 
-        setActionBarTitle();
         getUIComponents();
         setButtonsListeners();
+        setHomeFragment();
+
+    }
+
+    private void setHomeFragment()
+    {
+        currFragment = new UserHomeFragment();;
+        fm = getSupportFragmentManager();
+        fm.beginTransaction().replace(R.id.fragment_container, currFragment).commit();
+        setActionBar("Home", false);
     }
 
     private void setButtonsListeners()
@@ -57,10 +73,11 @@ public class UserHomeActivity extends AppCompatActivity implements View.OnClickL
         feedButton = (Button) findViewById(R.id.home_feed_button);
     }
 
-    private void setActionBarTitle()
+    private void setActionBar(String title, boolean showBackButton)
     {
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Home");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(showBackButton);
+        actionBar.setTitle(title);
     }
 
     @Override
@@ -84,11 +101,14 @@ public class UserHomeActivity extends AppCompatActivity implements View.OnClickL
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
+            case android.R.id.home: //when back button is pressed, go back to User Home Fragment
+                setHomeFragment();
+                return true;
             case R.id.action_capture:
                 handleCaptureButtonClick();
                 return true;
             case R.id.action_feed:
-                startActivity(new Intent(this, FeedActivity.class));
+                setFeedFragment();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -103,11 +123,19 @@ public class UserHomeActivity extends AppCompatActivity implements View.OnClickL
                 handleCaptureButtonClick();
                 break;
             case R.id.home_feed_button:
-                startActivity(new Intent(UserHomeActivity.this, FeedActivity.class));
+                setFeedFragment();
                 break;
             default:
                 break;
         }
+    }
+
+    private void setFeedFragment()
+    {
+        currFragment = new FeedFragment();
+        fm.beginTransaction().replace(R.id.fragment_container, currFragment).commit();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setActionBar("Feed", true);
     }
 
     private void handleCaptureButtonClick()
@@ -162,14 +190,20 @@ public class UserHomeActivity extends AppCompatActivity implements View.OnClickL
             width  = AppConstants.REQUIRED_PHOTO_WIDTH; // change Bitmap Width
             height = (int) (h * ((float) AppConstants.REQUIRED_PHOTO_WIDTH / w)); // change Bitmap Height
 
-            resizeBitmapTask resizeBitmapTask = new resizeBitmapTask(); //resize bitmap in AsyncTask (different Thread)
+            ResizeBitmapTask resizeBitmapTask = new ResizeBitmapTask(); //resize bitmap in AsyncTask (different Thread)
             resizeBitmapTask.execute();
         }
 
     }
 
+    @Override
+    public void onFragmentInteraction(Object... objs)
+    {
+        //
+    }
+
     // AsyncTask Resizing Bitmap
-    private class resizeBitmapTask extends AsyncTask<Void, Void, Bitmap>
+    private class ResizeBitmapTask extends AsyncTask<Void, Void, Bitmap>
     {
         @Override
         protected Bitmap doInBackground(Void... params) {
@@ -179,7 +213,7 @@ public class UserHomeActivity extends AppCompatActivity implements View.OnClickL
 
         @Override protected void onPostExecute(Bitmap result) {
             SavedSharedPreferences.saveBitmapToCahche(result, photosCount); //save bitmap to cache
-            startActivity(new Intent(UserHomeActivity.this, FeedActivity.class)); //go to Feed activity
+            setFeedFragment();
         }
     }
 }

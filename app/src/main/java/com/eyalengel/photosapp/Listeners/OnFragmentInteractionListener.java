@@ -5,5 +5,5 @@ package com.eyalengel.photosapp.Listeners;
  */
 public interface OnFragmentInteractionListener
 {
-    public void onFragmentInteraction(Object... objs);
+    public void onFragmentInteraction(Object... objects);
 }

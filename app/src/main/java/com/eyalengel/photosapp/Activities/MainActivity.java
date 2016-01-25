@@ -142,8 +142,7 @@ public class MainActivity extends AppCompatActivity
     {
 
         @Override
-        protected Integer doInBackground(String... params)
-        {
+        protected Integer doInBackground(String... params) {
             return isUserExist(params[0], params[1]);
         }
 

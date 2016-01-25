@@ -197,7 +197,7 @@ public class UserHomeActivity extends AppCompatActivity implements View.OnClickL
     }
 
     @Override
-    public void onFragmentInteraction(Object... objs)
+    public void onFragmentInteraction(Object... objects)
     {
         //
     }

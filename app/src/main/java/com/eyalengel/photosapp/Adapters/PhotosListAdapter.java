@@ -16,8 +16,8 @@ import java.util.List;
 /**
  * Created by EyalEngel on 20/01/16.
  */
-public class PhotosListAdapter extends ArrayAdapter<String> {
-
+public class PhotosListAdapter extends ArrayAdapter<String>
+{
     private Context context;
     private List<String> photosKeys;
     private int layoutResourceID;
